@@ -11,19 +11,20 @@ export const useUserSync = () => {
   const { getToken } = useAuth(); //
   const token = getToken(); //
 
-  console.log("🔐 Clerk user ID:", user?.id);
-  console.log("🔐 Clerk token exists:", !!token);
+  // console.log("🔐 Clerk user ID:", user?.id);
+  // console.log("🔐 Clerk token exists:", !!token);
 
   useEffect(() => {
     if (!user) return;
 
     const syncUser = async () => {
-      const token = await getToken();
+      const token = await getToken(); //
       if (token) {
-        const payload = JSON.parse(atob(token.split(".")[1]));
+        //
+        const payload = JSON.parse(atob(token.split(".")[1])); //
 
-        console.log("🔐 Clerk JWT payload:", payload);
-      }
+        // console.log("🔐 Clerk JWT payload:", payload); //
+      } //
       try {
         const { data: existingUser, error: fetchError } = await authSupabase
           .from("users")
