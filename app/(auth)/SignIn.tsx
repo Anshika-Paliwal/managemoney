@@ -11,11 +11,10 @@ import React from "react";
 import { Controller, useForm } from "react-hook-form";
 import {
   ActivityIndicator,
-  Platform,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -92,67 +91,65 @@ export default function SignIn() {
   };
   if (signIn.status === "needs_client_trust") {
     return (
-          <SafeAreaView className="px-4 flex-1 bg-brand-body">
-            <Text className="text-3xl font-bold text-brand-text leading-tight pt-4">
-              Verify your account
-            </Text>
-            <Controller
-              control={codeControl}
-              name="code"
-              render={({ field: { value, onChange } }) => {
-                return (
-                  <TextInput
-                    className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
-                    placeholder="Enter Verification Code"
-                    placeholderTextColor="#8A8D96"
-                    value={value}
-                    onChangeText={onChange}
-                  />
-                );
-              }}
-            />
-            {codeErrors.code && (
-              <Text className="text-brand-coral text-sm pb-2">
-                {codeErrors.code?.message}
-              </Text>
-            )}
-            {errors.fields.code && (
-              <Text className="text-brand-coral text-sm pb-2">
-                {errors.fields.code.message}
-              </Text>
-            )}
-            <TouchableOpacity
-              className="w-full bg-brand-blue my-2 py-4 rounded-xl items-center"
-              onPress={handleCodeSubmit(onCodeSubmit)}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <ActivityIndicator color="white" />
-              ) : (
-                <Text className="text-white font-semibold text-base">Verify</Text>
-              )}
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="items-center py-4"
-              onPress={() => signIn.mfa.sendEmailCode()}
-            >
-              <Text className="text-brand-blue font-semibold">
-                I need a new code
-              </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              className="items-center py-4"
-              onPress={() => signIn.reset()}
-            >
-              <Text className="text-brand-blue font-semibold">Start over</Text>
-            </TouchableOpacity>
-          </SafeAreaView>
-        );
+      <SafeAreaView className="px-4 flex-1 bg-brand-body">
+        <Text className="text-3xl font-bold text-brand-text leading-tight pt-4">
+          Verify your account
+        </Text>
+        <Controller
+          control={codeControl}
+          name="code"
+          render={({ field: { value, onChange } }) => {
+            return (
+              <TextInput
+                className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
+                placeholder="Enter Verification Code"
+                placeholderTextColor="#8A8D96"
+                value={value}
+                onChangeText={onChange}
+              />
+            );
+          }}
+        />
+        {codeErrors.code && (
+          <Text className="text-brand-coral text-sm pb-2">
+            {codeErrors.code?.message}
+          </Text>
+        )}
+        {errors.fields.code && (
+          <Text className="text-brand-coral text-sm pb-2">
+            {errors.fields.code.message}
+          </Text>
+        )}
+        <TouchableOpacity
+          className="w-full bg-brand-blue my-2 py-4 rounded-xl items-center"
+          onPress={handleCodeSubmit(onCodeSubmit)}
+          disabled={isLoading}
+        >
+          {isLoading ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <Text className="text-white font-semibold text-base">Verify</Text>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="items-center py-4"
+          onPress={() => signIn.mfa.sendEmailCode()}
+        >
+          <Text className="text-brand-blue font-semibold">
+            I need a new code
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          className="items-center py-4"
+          onPress={() => signIn.reset()}
+        >
+          <Text className="text-brand-blue font-semibold">Start over</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    );
   }
   return (
-    <SafeAreaView
-      className="flex-1 bg-brand-body"
-    >
+    <SafeAreaView className="flex-1 bg-brand-body">
       <View className="px-4">
         <Text className="text-3xl font-bold text-brand-text leading-tight pt-4">
           Welcome back
@@ -233,7 +230,6 @@ export default function SignIn() {
           </Link>
         </View>
       </View>
-      <View nativeID="clerk-captcha" />
     </SafeAreaView>
   );
 }
