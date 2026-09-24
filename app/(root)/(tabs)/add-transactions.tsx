@@ -202,7 +202,7 @@ export default function AddTransactions() {
         </Text>
       </View>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : "padding"}
         className="flex-1"
       >
         {loadingAccounts ? (
@@ -218,6 +218,7 @@ export default function AddTransactions() {
           </View>
         ) : (
           <ScrollView
+            keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
             contentContainerStyle={{
               paddingHorizontal: 20,
@@ -241,7 +242,7 @@ export default function AddTransactions() {
               />
             </View>
 
-            <View className="flex-row bg-white rounded-xl border border-[#E8E6DF] p-2 my-4">
+            <View className="flex-row bg-white rounded-xl border border-[#E8E6DF] p-1 my-4">
               {typeOptions.map((t) => (
                 <TouchableOpacity
                   key={t.key}
@@ -254,7 +255,7 @@ export default function AddTransactions() {
                         : EXPENSE_CATEGORIES[0].key,
                     );
                   }}
-                  className={`flex-1 py-2 rounded-lg items-center ${
+                  className={`flex-1 py-3 rounded-lg items-center ${
                     type === t.key ? "bg-brand-bg" : ""
                   }`}
                 >

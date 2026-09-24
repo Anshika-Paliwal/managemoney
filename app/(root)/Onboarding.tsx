@@ -123,14 +123,14 @@ const Onboarding = () => {
             Let's get you set-up
           </Text>
           <Text className="text-brand-text-muted text-base py-8">
-            A couple of quick details to get started.
+            Please enter the starting balance below.
           </Text>
 
           <Text className="text-brand-bg font-medium mb-4">
             Starting balance
           </Text>
-          <View className="flex-row bg-white items-center border border-[#E8E6DF] rounded-xl px-4 ">
-            <Text className="text-brand-text-secondary mx-2">
+          <View className="bg-white flex-row items-center border border-[#E8E6DF] rounded-xl px-4 ">
+            <Text className="text-brand-text-secondary bg-white">
               {selectedCurrency.symbol}
             </Text>
             <Controller
@@ -139,7 +139,7 @@ const Onboarding = () => {
               render={({ field: { value, onChange } }) => {
                 return (
                   <TextInput
-                    className="bg-white rounded-xl px-4 py-4 text-[#1A1D26]"
+                    className="flex-1 rounded-xl py-4 text-[#1A1D26]"
                     placeholder="e.g. 5,000"
                     placeholderTextColor="#8A8D96"
                     keyboardType="numeric"
@@ -181,7 +181,7 @@ const Onboarding = () => {
             disabled={saving}
           >
             <Text className="text-white text-sm font-semibild">
-              {saving ? "Saving..." : "Get Started"}
+              {saving ? "Saving..." : "Get started"}
             </Text>
           </TouchableOpacity>
         </View>

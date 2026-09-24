@@ -80,9 +80,9 @@ export default function SignUp() {
       console.error("Sign Up attempt unsuccessful!", signUp);
     }
   };
-  // if (signUp.status === "complete" || isSignedIn) {
-  //   return null;
-  // }
+  if (signUp.status === "complete" || isSignedIn) {
+    return null;
+  }
 
   if (
     signUp.status === "missing_requirements" &&
@@ -95,8 +95,9 @@ export default function SignUp() {
           Verify your account
         </Text>
         <Text className="text-brand-text-muted text-base py-8">
-          We sent a verification code to {email}. Please enter the code below to
-          verify your account.
+          We sent a verification code to{" "}
+          <Text className="font-bold text-brand-text">{email}</Text>. Please
+          enter the code below to verify your account.
         </Text>
         <Controller
           control={codeControl}
@@ -105,7 +106,7 @@ export default function SignUp() {
             return (
               <TextInput
                 className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
-                placeholder="Enter Verification Code"
+                placeholder="Enter verification code"
                 placeholderTextColor="#8A8D96"
                 value={value}
                 onChangeText={onChange}
@@ -124,7 +125,7 @@ export default function SignUp() {
           </Text>
         )}
         <TouchableOpacity
-          className="w-full bg-brand-blue my-2 py-4 rounded-xl items-center"
+          className="w-full bg-brand-bg my-2 py-4 rounded-xl items-center"
           onPress={handleCodeSubmit(onCodeSubmit)}
           disabled={isLoading}
         >
@@ -138,150 +139,152 @@ export default function SignUp() {
           className="items-center py-4"
           onPress={() => signUp.verifications.sendEmailCode()}
         >
-          <Text className="text-brand-blue font-semibold">
-            I need a new code
-          </Text>
+          <Text className="text-brand-bg font-semibold">I need a new code</Text>
         </TouchableOpacity>
         <TouchableOpacity
           className="items-center py-4"
           onPress={() => signUp.reset()}
         >
-          <Text className="text-brand-blue font-semibold">Start over</Text>
+          <Text className="text-brand-bg font-semibold">Start over</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
   }
 
   return (
-    <KeyboardAvoidingView
-      className="flex-1 bg-brand-body"
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-    >
-      <View className="px-4">
-        <Text className="text-3xl font-bold text-brand-text leading-tight pt-4">
-          Sign Up
-        </Text>
-        <Text className="text-brand-text-muted text-base py-8">
-          Create an account to get started.
-        </Text>
-        <Controller
-          control={control}
-          name="firstName"
-          render={({ field: { value, onChange } }) => {
-            return (
-              <TextInput
-                className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
-                placeholder="First Name"
-                placeholderTextColor="#8A8D96"
-                autoCapitalize="words"
-                value={value}
-                onChangeText={onChange}
-              />
-            );
-          }}
-        />
-        {(formErrors.firstName || formErrors.firstName) && (
-          <Text className="text-brand-coral text-sm pb-2">
-            {formErrors.firstName?.message || formErrors.firstName?.message}
+    <SafeAreaView className="flex-1 bg-brand-body">
+      <KeyboardAvoidingView
+        className="flex-1 bg-brand-body"
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      >
+        <View className="px-4">
+          <Text className="text-3xl font-bold text-brand-text leading-tight pt-4">
+            Sign Up
           </Text>
-        )}
-        <Controller
-          control={control}
-          name="lastName"
-          render={({ field: { value, onChange } }) => {
-            return (
-              <TextInput
-                className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
-                placeholder="Last Name"
-                placeholderTextColor="#8A8D96"
-                autoCapitalize="words"
-                value={value}
-                onChangeText={onChange}
-              />
-            );
-          }}
-        />
-        {(formErrors.lastName || formErrors.lastName) && (
-          <Text className="text-brand-coral text-sm pb-2">
-            {formErrors.lastName?.message || formErrors.lastName?.message}
+          <Text className="text-brand-text-muted text-base py-8">
+            Create an account to get started.
           </Text>
-        )}
-
-        <Controller
-          control={control}
-          name="email"
-          render={({ field: { value, onChange } }) => {
-            return (
-              <TextInput
-                className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
-                placeholder="Email Address"
-                placeholderTextColor="#8A8D96"
-                autoCapitalize="none"
-                value={value}
-                onChangeText={onChange}
-              />
-            );
-          }}
-        />
-        {formErrors.email && (
-          <Text className="text-brand-coral text-sm pb-2">
-            {formErrors.email?.message}
-          </Text>
-        )}
-        {errors.fields.emailAddress && (
-          <Text className="text-brand-coral text-sm pb-2">
-            {errors.fields.emailAddress.message}
-          </Text>
-        )}
-
-        <Controller
-          control={control}
-          name="password"
-          render={({ field: { value, onChange } }) => {
-            return (
-              <TextInput
-                className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
-                placeholder="Password"
-                placeholderTextColor="#8A8D96"
-                value={value}
-                onChangeText={onChange}
-                secureTextEntry
-              />
-            );
-          }}
-        />
-        {formErrors.password && (
-          <Text className="text-brand-coral text-sm pb-2">
-            {formErrors.password?.message}
-          </Text>
-        )}
-        {errors.fields.password && (
-          <Text className="text-brand-coral text-sm pb-2">
-            {errors.fields.password.message}
-          </Text>
-        )}
-        <TouchableOpacity
-          className="w-full bg-brand-blue my-2 py-4 rounded-xl items-center"
-          onPress={handleSubmit(onSignUpPress)}
-          disabled={isLoading}
-        >
-          {isLoading ? (
-            <ActivityIndicator color="white" />
-          ) : (
-            <Text className="text-white font-semibold text-base">Sign Up</Text>
+          <Controller
+            control={control}
+            name="firstName"
+            render={({ field: { value, onChange } }) => {
+              return (
+                <TextInput
+                  className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
+                  placeholder="First Name"
+                  placeholderTextColor="#8A8D96"
+                  autoCapitalize="words"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              );
+            }}
+          />
+          {(formErrors.firstName || formErrors.firstName) && (
+            <Text className="text-brand-coral text-sm pb-2">
+              {formErrors.firstName?.message || formErrors.firstName?.message}
+            </Text>
           )}
-        </TouchableOpacity>
+          <Controller
+            control={control}
+            name="lastName"
+            render={({ field: { value, onChange } }) => {
+              return (
+                <TextInput
+                  className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
+                  placeholder="Last Name"
+                  placeholderTextColor="#8A8D96"
+                  autoCapitalize="words"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              );
+            }}
+          />
+          {(formErrors.lastName || formErrors.lastName) && (
+            <Text className="text-brand-coral text-sm pb-2">
+              {formErrors.lastName?.message || formErrors.lastName?.message}
+            </Text>
+          )}
 
-        <View className="flex-row justify-center my-4 gap-2">
-          <Text className="text-brand-text-muted">
-            Already have an account?
-          </Text>
-          <Link href="/(auth)/SignIn">
-            <Text className="text-brand-blue font-semibold">Sign In</Text>
-          </Link>
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { value, onChange } }) => {
+              return (
+                <TextInput
+                  className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
+                  placeholder="Email Address"
+                  placeholderTextColor="#8A8D96"
+                  autoCapitalize="none"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              );
+            }}
+          />
+          {formErrors.email && (
+            <Text className="text-brand-coral text-sm pb-2">
+              {formErrors.email?.message}
+            </Text>
+          )}
+          {errors.fields.emailAddress && (
+            <Text className="text-brand-coral text-sm pb-2">
+              {errors.fields.emailAddress.message}
+            </Text>
+          )}
+
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { value, onChange } }) => {
+              return (
+                <TextInput
+                  className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
+                  placeholder="Password"
+                  placeholderTextColor="#8A8D96"
+                  value={value}
+                  onChangeText={onChange}
+                  secureTextEntry
+                />
+              );
+            }}
+          />
+          {formErrors.password && (
+            <Text className="text-brand-coral text-sm pb-2">
+              {formErrors.password?.message}
+            </Text>
+          )}
+          {errors.fields.password && (
+            <Text className="text-brand-coral text-sm pb-2">
+              {errors.fields.password.message}
+            </Text>
+          )}
+          <TouchableOpacity
+            className="w-full bg-brand-bg my-2 py-4 rounded-xl items-center"
+            onPress={handleSubmit(onSignUpPress)}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <ActivityIndicator color="white" />
+            ) : (
+              <Text className="text-white font-semibold text-base">
+                Sign Up
+              </Text>
+            )}
+          </TouchableOpacity>
+
+          <View className="flex-row justify-center my-4 gap-2">
+            <Text className="text-brand-text-muted">
+              Already have an account?
+            </Text>
+            <Link href="/(auth)/SignIn">
+              <Text className="text-brand-bg font-semibold">Sign In</Text>
+            </Link>
+          </View>
         </View>
-      </View>
-      <View nativeID="clerk-captcha" />
-    </KeyboardAvoidingView>
+        <View nativeID="clerk-captcha" />
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }

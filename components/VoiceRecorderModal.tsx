@@ -1,27 +1,102 @@
 import { AI_GRADIENT, COLORS, RECORDING_GRADIENT } from "@/constants/theme";
 import {
-    ExtractedTransaction,
-    extractTransactionFromVoice,
+  ExtractedTransaction,
+  extractTransactionFromVoice,
 } from "@/lib/services/extractTransaction";
 import { Feather, MaterialCommunityIcons } from "@expo/vector-icons";
 import {
-    RecordingPresets,
-    requestRecordingPermissionsAsync,
-    setAudioModeAsync,
-    useAudioRecorder,
+  RecordingPresets,
+  requestRecordingPermissionsAsync,
+  setAudioModeAsync,
+  useAudioRecorder,
 } from "expo-audio";
 import { BlurView } from "expo-blur";
 import { File } from "expo-file-system";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Modal,
-    Text,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Modal,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
+import Animated, {
+  Easing,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from "react-native-reanimated";
+import { GradientIconButton } from "./GradientIconButton";
 
 type Status = "idle" | "recording" | "processing" | "error";
+
+function PulseRing({ delay, active }: { delay: number; active: boolean }) {
+  const progress = useSharedValue(0);
+
+  useEffect(() => {
+    if (!active) {
+      progress.value = 0;
+      return;
+    }
+    progress.value = withRepeat(
+      withSequence(
+        withTiming(0, { duration: 0 }),
+        withTiming(1, { duration: 1600, easing: Easing.out(Easing.ease) }),
+      ),
+      -1,
+      false,
+    );
+  }, [active, progress, delay]);
+
+  const style = useAnimatedStyle(() => ({
+    opacity: (1 - progress.value) * 0.5,
+    transform: [{ scale: 1 + progress.value * 0.9 }],
+  }));
+
+  return (
+    <Animated.View
+      style={style}
+      className="absolute w-24 h-24 rounded-full border-2 border-[#0E9C79]"
+    />
+  );
+}
+
+function ProcessingRing() {
+  const rotation = useSharedValue(0);
+
+  useEffect(() => {
+    rotation.value = withRepeat(
+      withTiming(360, { duration: 1100, easing: Easing.linear }),
+      -1,
+      false,
+    );
+  }, [rotation]);
+
+  const style = useAnimatedStyle(() => ({
+    transform: [{ rotate: `${rotation.value}deg` }],
+  }));
+
+  return (
+    <Animated.View style={style} className="absolute w-24 h-24">
+      <LinearGradient
+        colors={[AI_GRADIENT[1], AI_GRADIENT[0], "transparent"]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={{
+          width: 96,
+          height: 96,
+          borderRadius: 48,
+          padding: 3,
+        }}
+      >
+        <View className="flex-1 rounded-full bg-[#161829]" />
+      </LinearGradient>
+    </Animated.View>
+  );
+}
 
 const VoiceRecorderModal = ({
   visible,
@@ -35,6 +110,8 @@ const VoiceRecorderModal = ({
   const recorder = useAudioRecorder(RecordingPresets.HIGH_QUALITY);
   const [status, setStatus] = useState<Status>("idle");
   const [seconds, setSeconds] = useState(0);
+
+  const orbScale = useSharedValue(1);
 
   useEffect(() => {
     if (!visible) {
@@ -60,6 +137,28 @@ const VoiceRecorderModal = ({
     const interval = setInterval(() => setSeconds((s) => s + 1), 1000);
     return () => clearInterval(interval);
   }, [status]);
+
+  useEffect(() => {
+    if (status === "recording") {
+      orbScale.value = withRepeat(
+        withSequence(
+          withTiming(1.08, {
+            duration: 500,
+            easing: Easing.inOut(Easing.ease),
+          }),
+          withTiming(1, { duration: 500, easing: Easing.inOut(Easing.ease) }),
+        ),
+        -1,
+        false,
+      );
+    } else {
+      orbScale.value = withTiming(1, { duration: 200 });
+    }
+  }, [status, orbScale]);
+
+  const orbStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: orbScale.value }],
+  }));
 
   const startRecording = async () => {
     setSeconds(0);
@@ -91,12 +190,12 @@ const VoiceRecorderModal = ({
     <Modal visible={visible} animationType="slide" transparent>
       <View className="flex-1 justify-end">
         <BlurView intensity={40} tint="dark" className="absolute inset-0" />
-        <View
+        <LinearGradient
+          colors={["#1C1E2E", "#0F1020"]}
           style={{
             width: "100%",
             alignItems: "center",
             overflow: "hidden",
-            backgroundColor: "#14162A",
             borderTopLeftRadius: 28,
             borderTopRightRadius: 28,
             paddingHorizontal: 24,
@@ -150,28 +249,35 @@ const VoiceRecorderModal = ({
                     : '"I spent 400 on groceries yesterday."'}
               </Text>
 
-              <View className="w-24 h-24 items-center justify-center my-4">
-                {status === "processing" ? (
-                  <ActivityIndicator size="large" color={COLORS.teal} />
-                ) : (
-                  <TouchableOpacity
-                      onPress={status === "recording" ? stopRecording : startRecording}
-                    activeOpacity={0.85}
-                    className="w-16 h-16 rounded-full items-center justify-center"
-                    style={{
-                      backgroundColor:
-                        status === "recording"
-                          ? RECORDING_GRADIENT[0]
-                          : AI_GRADIENT[0],
-                    }}
-                  >
-                    <Feather
-                      name={status === "recording" ? "stop-circle" : "mic"}
-                      size={24}
-                      color="#FFFFFF"
-                    />
-                  </TouchableOpacity>
+              <View className="w-24 h-24 items-center justify-center mb-8">
+                {status === "idle" && (
+                  <>
+                    <PulseRing delay={0} active />
+                    <PulseRing delay={800} active />
+                  </>
                 )}
+                {status === "recording" && (
+                  <>
+                    <PulseRing delay={0} active />
+                    <PulseRing delay={500} active />
+                  </>
+                )}
+                {status === "processing" && <ProcessingRing />}
+
+                <Animated.View style={orbStyle}>
+                  <GradientIconButton
+                    icon={status === "recording" ? "square" : "mic"}
+                    colors={
+                      status === "recording"
+                        ? RECORDING_GRADIENT
+                        : [AI_GRADIENT[1], AI_GRADIENT[0]]
+                    }
+                    disabled={status === "processing"}
+                    onPress={
+                      status === "recording" ? stopRecording : startRecording
+                    }
+                  />
+                </Animated.View>
               </View>
 
               <TouchableOpacity
@@ -182,7 +288,7 @@ const VoiceRecorderModal = ({
               </TouchableOpacity>
             </>
           )}
-        </View>
+        </LinearGradient>
       </View>
     </Modal>
   );
