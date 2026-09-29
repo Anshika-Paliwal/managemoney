@@ -117,6 +117,7 @@ export default function Transactions() {
 
   const dailyIncomeExpense = useMemo(() => {
     const days = currentMonthDays();
+    console.log("dailyIncomeExpense", dailyIncomeExpense);
     return days.flatMap(({ key, label }) => {
       const income = transactions
         .filter(
@@ -166,7 +167,7 @@ export default function Transactions() {
           <TextInput
             value={search}
             onChangeText={setSearch}
-            placeholder="Serach Transactions"
+            placeholder="Search transactions"
             placeholderTextColor="8A8D96"
             className="text-brand-bg text-sm flex-1"
           />
@@ -175,7 +176,7 @@ export default function Transactions() {
           </TouchableOpacity>
         </View>
 
-        <View className="flex-row gap-2 mb-4">
+        <View className="flex-row gap-2 mb-4 width-100">
           {filters.map((filter) => (
             <TouchableOpacity
               key={filter}
@@ -208,9 +209,10 @@ export default function Transactions() {
               <TouchableOpacity
                 key={account.id}
                 onPress={() => setActiveAccountId(account.id)}
-                className={`px-4 py-2 rounded-full border ${activeAccountId === account.id ? "bg-brand-bg border-brand-bg" : "bg-white border-[#E8E6DF]"}`}
+                className={`max-w-[120px] px-4 py-2 rounded-full border ${activeAccountId === account.id ? "bg-brand-bg border-brand-bg" : "bg-white border-[#E8E6DF]"}`}
               >
                 <Text
+                  numberOfLines={1}
                   className={`text-sm ${activeAccountId === account.id ? "text-white" : "text-brand-text-secondary"}`}
                 >
                   {account.name}
@@ -248,7 +250,7 @@ export default function Transactions() {
           }
           ListHeaderComponent={
             transactions.length > 0 ? (
-              <View className="bg-white rounded-2xl border border-[#E8E6DF] p-4 mb-4">
+              <View className="bg-white rounded-2xl border border-[#E8E6DF] py-4 px-6 mb-4">
                 <View className="flex-row justify-between items-center mb-4">
                   <Text className="text-brand-bg text-xs font-medium">
                     Daily income vs expense
@@ -256,7 +258,7 @@ export default function Transactions() {
 
                   <View className="flex-row gap-2">
                     <View className="flex-row items-center gap-1">
-                      <View className="w-2 h-2 rounded-full bg-brand-coral" />
+                      <View className="w-2 h-2 rounded-full bg-brand-success" />
                       <Text className="text-[10px] text-brand-text-secondary">
                         Income
                       </Text>
@@ -264,7 +266,7 @@ export default function Transactions() {
                   </View>
 
                   <View className="flex-row items-center gap-1">
-                    <View className="w-2 h-2 rounded-full bg-brand-success" />
+                    <View className="w-2 h-2 rounded-full bg-brand-coral" />
                     <Text className="text-[10px] text-brand-text-secondary">
                       Expense
                     </Text>
@@ -274,12 +276,12 @@ export default function Transactions() {
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   <BarChart
                     data={dailyIncomeExpense}
-                    width={Math.max(dailyIncomeExpense.length * 9, 280)}
-                    height={120}
-                    barWidth={6}
-                    spacing={4}
+                    width={Math.max(dailyIncomeExpense.length * 20, 320)}
+                    height={140}
+                    barWidth={12}
+                    spacing={8}
                     hideYAxisText
-                    xAxisColor="E8E6DF"
+                    xAxisColor="#E8E6DF"
                     yAxisColor="transparent"
                     rulesColor="#F0EEE7"
                     noOfSections={3}

@@ -85,7 +85,7 @@ export default function Home() {
 
   const totalBalance = useMemo(
     () => accounts.reduce((sum, account) => sum + account.balance, 0),
-    [],
+    [accounts],
   );
 
   const monthTransactions = useMemo(() => {
@@ -253,7 +253,10 @@ export default function Home() {
 
             {budget ? (
               <>
-                <Text className="text-brand-text-secondary text-sm my-2">
+                <Text
+                  numberOfLines={1}
+                  className="text-brand-text-secondary text-sm my-2"
+                >
                   {formatPrice(monthExpense, currency)} of{" "}
                   {formatPrice(budget.amount, currency)} spent
                 </Text>

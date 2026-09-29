@@ -14,7 +14,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -102,7 +102,7 @@ export default function SignIn() {
             return (
               <TextInput
                 className="border border-[#E8E6DF] bg-white rounded-xl my-2 px-4 py-4 text-[#1A1D26]"
-                placeholder="Enter Verification Code"
+                placeholder="Enter verification code"
                 placeholderTextColor="#8A8D96"
                 value={value}
                 onChangeText={onChange}
@@ -121,7 +121,7 @@ export default function SignIn() {
           </Text>
         )}
         <TouchableOpacity
-          className="w-full bg-brand-blue my-2 py-4 rounded-xl items-center"
+          className="w-full bg-brand-bg my-2 py-4 rounded-xl items-center"
           onPress={handleCodeSubmit(onCodeSubmit)}
           disabled={isLoading}
         >
@@ -135,15 +135,13 @@ export default function SignIn() {
           className="items-center py-4"
           onPress={() => signIn.mfa.sendEmailCode()}
         >
-          <Text className="text-brand-blue font-semibold">
-            I need a new code
-          </Text>
+          <Text className="text-brand-bg font-semibold">I need a new code</Text>
         </TouchableOpacity>
         <TouchableOpacity
           className="items-center py-4"
           onPress={() => signIn.reset()}
         >
-          <Text className="text-brand-blue font-semibold">Start over</Text>
+          <Text className="text-brand-bg font-semibold">Start over</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );
@@ -212,11 +210,11 @@ export default function SignIn() {
           </Text>
         )}
         <TouchableOpacity
-          className="w-full bg-brand-blue my-2 py-4 rounded-xl items-center"
+          className="w-full bg-brand-bg my-2 py-4 rounded-xl items-center"
           onPress={handleSubmit(onSignInPress)}
           disabled={isLoading}
         >
-          {isLoading ? (
+          {!!isLoading ? (
             <ActivityIndicator color="white" />
           ) : (
             <Text className="text-white font-semibold text-base">Sign In</Text>
@@ -226,7 +224,7 @@ export default function SignIn() {
         <View className="flex-row justify-center my-4 gap-2">
           <Text className="text-brand-text-muted">Don't have an account?</Text>
           <Link href="/(auth)/SignUp">
-            <Text className="text-brand-blue font-semibold">Sign Up</Text>
+            <Text className="text-brand-bg font-semibold">Sign Up</Text>
           </Link>
         </View>
       </View>

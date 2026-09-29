@@ -1,5 +1,6 @@
 import { getCategoryConfig } from "@/constants/categories";
 import { formatPrice } from "@/lib/utils";
+import { useUserStore } from "@/store/userStore";
 import { Transaction } from "@/types";
 import { Feather } from "@expo/vector-icons";
 import React from "react";
@@ -25,6 +26,7 @@ const TransactionsRow = ({
   console.log(tx);
   const transactionConfig = getCategoryConfig(tx.category);
   const isIncome = tx.type === "INCOME";
+  const currency = useUserStore((state) => state.currency);
 
   const row = (
     <View
@@ -32,10 +34,10 @@ const TransactionsRow = ({
       style={{ borderLeftWidth: 3, borderLeftColor: transactionConfig.color }}
     >
       <View
-        className="w-10 h-10 rounded-full items-center jusfity-center mr-4"
+        className="w-10 h-10 rounded-full items-center justify-center mr-4"
         style={{ backgroundColor: `${transactionConfig.color}22` }}
       >
-        <Text className="text-lg">{transactionConfig.icon}</Text>
+        <Text className="text-lg text-center">{transactionConfig.icon}</Text>
       </View>
       <View className="flex-1">
         <Text className="text-brand-bg text-sm font-medium" numberOfLines={1}>
@@ -72,7 +74,7 @@ const TransactionsRow = ({
         className={`text-sm font-medium ${isIncome ? "text-brand-success" : "text-brand-coral"}`}
       >
         {isIncome ? "+" : "-"}
-        {formatPrice(tx.amount)}
+        {formatPrice(tx.amount, currency)}
       </Text>
     </View>
   );

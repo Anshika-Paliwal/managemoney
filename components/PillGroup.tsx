@@ -22,7 +22,7 @@ const PillGroup = <T extends string>({
     <View className="flex-row gap-2">
       {options.map((option) => (
         <TouchableOpacity
-          className={`flex-row items-center gap-2 px-4 py-2 rounded-full border ${
+          className={`max-w-[120px] flex-row items-center gap-2 px-4 py-2 rounded-full border ${
             value === option.key
               ? "bg-brand-bg border-brand-bg"
               : "bg-white border-[#E8E6DF]"
@@ -32,6 +32,7 @@ const PillGroup = <T extends string>({
         >
           {option.icon && <Text className="text-xs">{option.icon}</Text>}
           <Text
+            numberOfLines={1}
             className={`text-sm ${value === option.key ? "text-white" : "text-brand-text-secondary"}`}
           >
             {option.label}
